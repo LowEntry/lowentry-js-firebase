@@ -1,0 +1,10 @@
+.cache/
+.idea/
+.vs/
+.vscode/
+node_modules/
+bin/
+build/
+dist/
+coverage/
+package-lock.json
