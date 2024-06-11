@@ -1,3 +1,1 @@
-import {setup} from './LeFirebase.js';
-
-export {setup};
+export {setup} from './LeFirebase.js';
