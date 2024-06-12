@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "@lowentry/react-redux": "^1",
+    "@lowentry/utils": "*",
     "firebase": "^10",
     "react-firebase-hooks": "*"
   },
