@@ -58,7 +58,13 @@ export const setup = (config) =>
 				() =>
 				{
 					stopped = true;
-					event.stop();
+					try
+					{
+						event.stop();
+					}
+					catch(e)
+					{
+					}
 				},
 			stopOnce:
 				() =>
@@ -66,7 +72,13 @@ export const setup = (config) =>
 					if(!stopped)
 					{
 						stopped = true;
-						event.stop();
+						try
+						{
+							event.stop();
+						}
+						catch(e)
+						{
+						}
 					}
 				},
 			
