@@ -1,5 +1,4 @@
 import {ARRAY} from '@lowentry/utils';
-import {LeRed} from '@lowentry/react-redux';
 import {initializeApp} from 'firebase/app';
 import {initializeFirestore, getFirestore, persistentLocalCache, persistentMultipleTabManager, doc, setDoc} from 'firebase/firestore';
 import {getAuth, signOut} from 'firebase/auth';
@@ -108,22 +107,22 @@ export const setup = (config) =>
 	});
 	
 	
-	LeRed.setAll({
+	return {
 		firebase:{app, store, analytics, performance, traces, auth, signOut:() => signOut(auth)},
 		
 		useAuthState:
-			(...args) => useAuthState(LeRed.firebase.auth, ...args),
+			(...args) => useAuthState(auth, ...args),
 		
 		useDocument:
-			(path, options) => useDocument(doc(LeRed.firebase.store, ...path), options),
+			(path, options) => useDocument(doc(store, ...path), options),
 		
 		useDocumentData:
-			(path, options) => useDocumentData(doc(LeRed.firebase.store, ...path), options),
+			(path, options) => useDocumentData(doc(store, ...path), options),
 		
 		setDocument:
-			(path, data, onlyUpdateFields) => setDoc(doc(LeRed.firebase.store, ...path), data, {}),
+			(path, data, onlyUpdateFields) => setDoc(doc(store, ...path), data, {}),
 		
 		updateDocument:
-			(path, data, onlyUpdateFields) => setDoc(doc(LeRed.firebase.store, ...path), data, onlyUpdateFields ? {mergeFields:ARRAY(onlyUpdateFields)} : {merge:true}),
-	});
+			(path, data, onlyUpdateFields) => setDoc(doc(store, ...path), data, onlyUpdateFields ? {mergeFields:ARRAY(onlyUpdateFields)} : {merge:true}),
+	};
 };

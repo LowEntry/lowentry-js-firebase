@@ -1,6 +1,6 @@
 {
   "name": "@lowentry/firebase",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "private": false,
   "description": "Provides utilities for Firebase.",
   "author": "Low Entry",
@@ -22,13 +22,12 @@
     "test": ""
   },
   "dependencies": {
-    "@lowentry/utils": "*",
-    "firebase": "^10",
-    "react-firebase-hooks": "*"
+    "@lowentry/utils": "*"
   },
   "peerDependencies": {
     "@babel/runtime": "*",
-    "@lowentry/react-redux": "^1"
+    "firebase": "^10",
+    "react-firebase-hooks": "*"
   },
   "devDependencies": {
     "@babel/core": "^7.24.7",
