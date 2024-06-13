@@ -4,7 +4,7 @@ import {initializeFirestore, getFirestore, persistentLocalCache, persistentMulti
 import {getAuth, signOut} from 'firebase/auth';
 import {getAnalytics} from 'firebase/analytics';
 import {getPerformance, trace} from 'firebase/performance';
-import {useDocument, useDocumentData} from 'react-firebase-hooks/firestore';
+import {useDocument, useDocumentData, useDocumentDataOnce, useDocumentOnce} from 'react-firebase-hooks/firestore';
 import {useAuthState} from 'react-firebase-hooks/auth';
 
 
@@ -118,6 +118,12 @@ export const setup = (config) =>
 		
 		useDocumentData:
 			(path, options) => useDocumentData(doc(store, ...path), options),
+		
+		useDocumentOnce:
+			(path, options) => useDocumentOnce(doc(store, ...path), options),
+		
+		useDocumentDataOnce:
+			(path, options) => useDocumentDataOnce(doc(store, ...path), options),
 		
 		setDocument:
 			(path, data, onlyUpdateFields) => setDoc(doc(store, ...path), data, {}),
