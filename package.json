@@ -1,6 +1,6 @@
 {
   "name": "@lowentry/firebase",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "private": false,
   "description": "Provides utilities for Firebase.",
   "author": "Low Entry",
