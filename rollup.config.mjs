@@ -5,6 +5,8 @@ import postcss from 'rollup-plugin-postcss';
 import peerDepsExternal from 'rollup-plugin-peer-deps-external';
 import terser from '@rollup/plugin-terser';
 import cssnano from 'cssnano';
+import autoprefixer from 'autoprefixer';
+import url from '@rollup/plugin-url';
 
 
 import path from 'path';
@@ -25,16 +27,14 @@ export default {
 	},
 	output: {
 		dir:           'dist',
-		format:        'cjs',
+		format:        'esm',
 		entryFileNames:'[name].js',
 		sourcemap:     true,
 		exports:       'named',
 	},
 	plugins:[
 		peerDepsExternal(),
-		resolve({
-			extensions:['.js', '.jsx'],
-		}),
+		resolve(),
 		commonjs(),
 		babel({
 			runtimeHelpers:true,
@@ -43,16 +43,18 @@ export default {
 				'@babel/preset-env',
 				'@babel/preset-react',
 			],
-			'plugins':     [
+			plugins:       [
 				'@babel/plugin-transform-runtime',
 			],
 		}),
 		postcss({
-			plugins: [
+			plugins:[
+				autoprefixer(),
 				cssnano(),
 			],
-			'inject':true,
+			inject: true,
 		}),
+		url(),
 		terser(),
 	],
 };
