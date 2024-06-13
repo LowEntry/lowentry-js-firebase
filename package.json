@@ -21,12 +21,14 @@
     "prepublishOnly": "rm -r src && mv dist/* ./ && rm -r dist",
     "test": ""
   },
-  "peerDependencies": {
-    "@babel/runtime": "*",
-    "@lowentry/react-redux": "^1",
+  "dependencies": {
     "@lowentry/utils": "*",
     "firebase": "^10",
     "react-firebase-hooks": "*"
+  },
+  "peerDependencies": {
+    "@babel/runtime": "*",
+    "@lowentry/react-redux": "^1"
   },
   "devDependencies": {
     "@babel/core": "^7.24.7",
