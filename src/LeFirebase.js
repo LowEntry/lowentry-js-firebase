@@ -1,4 +1,4 @@
-import {ARRAY} from '@lowentry/utils';
+import {LeUtils, ARRAY} from '@lowentry/utils';
 import {initializeApp} from 'firebase/app';
 import {initializeFirestore, getFirestore, persistentLocalCache, persistentMultipleTabManager, doc, setDoc} from 'firebase/firestore';
 import {getAuth, signOut} from 'firebase/auth';
@@ -119,11 +119,67 @@ export const setup = (config) =>
 	});
 	
 	
+	const LOCAL_STORAGE_ID__USER = 'LeFirebase_user_' + config.projectId;
+	let authenticatedUser = '';
+	
+	const setUser = (user) =>
+	{
+		const newUser = JSON.parse(JSON.stringify(user));
+		if(!LeUtils.equals(user, authenticatedUser))
+		{
+			LeUtils.localStorageSet(LOCAL_STORAGE_ID__USER, {user:newUser});
+		}
+	};
+	
+	const getUser = () =>
+	{
+		if(authenticatedUser === '')
+		{
+			authenticatedUser = LeUtils.localStorageGet(LOCAL_STORAGE_ID__USER);
+		}
+		return authenticatedUser;
+	};
+	
+	const clearUser = () =>
+	{
+		const promise = signOut(auth);
+		setUser(null);
+		return promise;
+	};
+	
+	
 	return {
-		firebase:{app, store, analytics, performance, traces, auth, signOut:() => signOut(auth)},
+		firebase:{app, store, analytics, performance, traces, auth, signOut:clearUser},
 		
 		useAuthState:
-			(...args) => useAuthState(auth, ...args),
+			(...args) =>
+			{
+				const [user, loading] = useAuthState(auth, ...args);
+				if(loading)
+				{
+					return [getUser(), false];
+				}
+				else
+				{
+					setUser(user);
+					return [user, false];
+				}
+			},
+		
+		useAuthStateNoCache:
+			(...args) =>
+			{
+				const [user, loading] = useAuthState(auth, ...args);
+				if(loading)
+				{
+					return [user, loading];
+				}
+				else
+				{
+					setUser(user);
+					return [user, loading];
+				}
+			},
 		
 		useDocument:
 			(path, options) => useDocument(doc(store, ...path), options),

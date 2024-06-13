@@ -3,7 +3,6 @@ import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import postcss from 'rollup-plugin-postcss';
 import peerDepsExternal from 'rollup-plugin-peer-deps-external';
-import terser from '@rollup/plugin-terser';
 import cssnano from 'cssnano';
 import autoprefixer from 'autoprefixer';
 import url from '@rollup/plugin-url';
@@ -55,6 +54,5 @@ export default {
 			inject: true,
 		}),
 		url(),
-		terser(),
 	],
 };
