@@ -123,22 +123,26 @@ export const setup = (config) =>
 	
 	
 	const LOCAL_STORAGE_ID__USER = 'LeFirebase_user_' + config.projectId;
-	let authenticatedUser = '';
+	let authenticatedUser = null;
+	let authenticatedUserRetrieved = false;
 	
 	const setUser = (user) =>
 	{
 		const newUser = JSON.parse(JSON.stringify(user));
-		if(!LeUtils.equals(user, authenticatedUser))
+		if(!authenticatedUserRetrieved || !LeUtils.equals(user, authenticatedUser))
 		{
 			LeUtils.localStorageSet(LOCAL_STORAGE_ID__USER, {user:newUser});
+			authenticatedUser = newUser;
+			authenticatedUserRetrieved = true;
 		}
 	};
 	
 	const getUser = () =>
 	{
-		if(authenticatedUser === '')
+		if(!authenticatedUserRetrieved)
 		{
-			authenticatedUser = LeUtils.localStorageGet(LOCAL_STORAGE_ID__USER);
+			authenticatedUser = LeUtils.localStorageGet(LOCAL_STORAGE_ID__USER)?.user ?? null;
+			authenticatedUserRetrieved = true;
 		}
 		return authenticatedUser;
 	};
@@ -167,22 +171,22 @@ export const setup = (config) =>
 				else
 				{
 					setUser(user);
-					return [user, false];
+					return [getUser(), false];
 				}
 			},
 		
-		useAuthStateNoCache:
+		useAuthStateIgnoreCache:
 			(...args) =>
 			{
 				const [user, loading] = useAuthState(auth, ...args);
 				if(loading)
 				{
-					return [user, loading];
+					return [null, true];
 				}
 				else
 				{
 					setUser(user);
-					return [user, loading];
+					return [getUser(), false];
 				}
 			},
 		
