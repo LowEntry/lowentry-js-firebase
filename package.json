@@ -1,6 +1,6 @@
 {
   "name": "@lowentry/firebase",
-  "version": "1.2.7",
+  "version": "1.2.8",
   "private": false,
   "type": "module",
   "main": "./index.js",
