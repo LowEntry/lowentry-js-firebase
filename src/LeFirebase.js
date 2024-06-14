@@ -1,16 +1,19 @@
 import {LeUtils, ARRAY} from '@lowentry/utils';
 import {initializeApp} from 'firebase/app';
-import {initializeFirestore, getFirestore, persistentLocalCache, persistentMultipleTabManager, doc, setDoc} from 'firebase/firestore';
 import {getAuth, signOut} from 'firebase/auth';
+import {initializeFirestore, getFirestore, persistentLocalCache, persistentMultipleTabManager, doc, setDoc} from 'firebase/firestore';
+import {getDatabase, ref, onValue} from 'firebase/database';
 import {getAnalytics} from 'firebase/analytics';
 import {getPerformance, trace} from 'firebase/performance';
-import {useDocument, useDocumentData, useDocumentDataOnce, useDocumentOnce} from 'react-firebase-hooks/firestore';
 import {useAuthState} from 'react-firebase-hooks/auth';
+import {useDocument, useDocumentData, useDocumentDataOnce, useDocumentOnce} from 'react-firebase-hooks/firestore';
+import {useList, useListKeys, useListVals, useObject, useObjectVal} from 'react-firebase-hooks/database';
 
 
 export const setup = (config) =>
 {
 	const app = initializeApp(config);
+	const auth = getAuth(app);
 	const store = (() =>
 	{
 		try
@@ -25,9 +28,9 @@ export const setup = (config) =>
 			return getFirestore(app);
 		}
 	})();
+	const db = getDatabase(app);
 	const analytics = getAnalytics(app);
 	const performance = getPerformance(app);
-	const auth = getAuth(app);
 	
 	
 	const createTraceEvent = (name) =>
@@ -149,7 +152,9 @@ export const setup = (config) =>
 	
 	
 	return {
-		firebase:{app, store, analytics, performance, traces, auth, signOut:clearUser},
+		firebase:{app, store, db, analytics, performance, traces, auth, signOut:clearUser},
+		
+		// auth >>
 		
 		useAuthState:
 			(...args) =>
@@ -181,6 +186,10 @@ export const setup = (config) =>
 				}
 			},
 		
+		// auth <<
+		
+		// firestore >>
+		
 		useDocument:
 			(path, options) => useDocument(doc(store, ...path), options),
 		
@@ -198,5 +207,59 @@ export const setup = (config) =>
 		
 		updateDocument:
 			(path, data, onlyUpdateFields) => setDoc(doc(store, ...path), data, onlyUpdateFields ? {mergeFields:ARRAY(onlyUpdateFields)} : {merge:true}),
+		
+		// firestore <<
+		
+		// database >>
+		
+		onRealtimeConnectedStatus:
+			(callback) =>
+			{
+				const connectionRef = ref(db, '.info/connected');
+				let listener = onValue(connectionRef, (snapshot) => callback(!!snapshot.val()));
+				
+				return {
+					remove:
+						() =>
+						{
+							if(listener !== null)
+							{
+								try
+								{
+									listener();
+								}
+								catch(e)
+								{
+									console.error('Removing the onConnectionStatus listener failed:', e);
+								}
+								listener = null;
+							}
+						},
+				};
+			},
+		
+		useRealtimeConnectedStatus:
+			() =>
+			{
+				const [value, loading, error] = useObjectVal(ref(db, '.info/connected'));
+				return [!!value, loading, error];
+			},
+		
+		useRealtimeList:
+			(path) => useList(ref(db, path)),
+		
+		useRealtimeListKeys:
+			(path) => useListKeys(ref(db, path)),
+		
+		useRealtimeListVals:
+			(path, options) => useListVals(ref(db, path), options),
+		
+		useRealtimeObject:
+			(path) => useObject(ref(db, path)),
+		
+		useRealtimeObjectVal:
+			(path, options) => useObjectVal(ref(db, path), options),
+		
+		// database <<
 	};
 };
