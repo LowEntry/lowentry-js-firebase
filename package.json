@@ -3,6 +3,7 @@
   "version": "1.2.6",
   "private": false,
   "type": "module",
+  "main": "./index.js",
   "description": "Provides utilities for Firebase.",
   "author": "Low Entry",
   "license": "MIT",
