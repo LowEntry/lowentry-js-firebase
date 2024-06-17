@@ -1,3 +1,4 @@
+import {LeRed} from '@lowentry/react-redux';
 import {LeUtils, ARRAY} from '@lowentry/utils';
 import {initializeApp} from 'firebase/app';
 import {getAuth, signOut} from 'firebase/auth';
@@ -155,7 +156,7 @@ export const setup = (config) =>
 	};
 	
 	
-	return {
+	const Firebase = {
 		firebase:{app, store, db, analytics, performance, traces, auth, signOut:clearUser},
 		
 		// auth >>
@@ -212,6 +213,78 @@ export const setup = (config) =>
 		updateDocument:
 			(path, data, onlyUpdateFields) => setDoc(doc(store, ...path), data, onlyUpdateFields ? {mergeFields:ARRAY(onlyUpdateFields)} : {merge:true}),
 		
+		useDocumentDataUncached:
+			(path, options) => useDocumentData(doc(store, ...path), {...(options ?? {}), snapshotListenOptions:{...(options?.snapshotListenOptions ?? {}), source:'server'}}),
+		
+		useDocumentDataOnceUncached:
+			(path, options) => useDocumentDataOnce(doc(store, ...path), {...(options ?? {}), getOptions:{...(options?.getOptions ?? {}), source:'server'}}),
+		
+		useDocumentDataCached:
+			(path, options) =>
+			{
+				const key = LeRed.useRef();
+				const cachedData = LeRed.useRef();
+				const lastPath = LeRed.useRef();
+				
+				if(!LeUtils.equals(lastPath.current, path))
+				{
+					key.current = 'LeFirebase_document_' + JSON.stringify(path);
+					cachedData.current = LeUtils.localStorageGet(key.current);
+					lastPath.current = path;
+				}
+				
+				const [data, loading, error] = useDocumentData(doc(store, ...path), options);
+				if(loading)
+				{
+					if(cachedData.current)
+					{
+						return [cachedData.current.data, false, null];
+					}
+				}
+				else
+				{
+					if(data && key.current)
+					{
+						cachedData.current = {data};
+						LeUtils.localStorageSet(key.current, cachedData.current);
+					}
+				}
+				return [data, loading, error];
+			},
+		
+		useDocumentDataOnceCached:
+			(path, options) =>
+			{
+				const key = LeRed.useRef();
+				const cachedData = LeRed.useRef();
+				const lastPath = LeRed.useRef();
+				
+				if(!LeUtils.equals(lastPath.current, path))
+				{
+					key.current = 'LeFirebase_document_' + JSON.stringify(path);
+					cachedData.current = LeUtils.localStorageGet(key.current);
+					lastPath.current = path;
+				}
+				
+				const [data, loading, error] = useDocumentDataOnce(doc(store, ...path), options);
+				if(loading)
+				{
+					if(cachedData.current)
+					{
+						return [cachedData.current.data, false, null];
+					}
+				}
+				else
+				{
+					if(data && key.current)
+					{
+						cachedData.current = {data};
+						LeUtils.localStorageSet(key.current, cachedData.current);
+					}
+				}
+				return [data, loading, error];
+			},
+		
 		// firestore <<
 		
 		// database >>
@@ -266,4 +339,5 @@ export const setup = (config) =>
 		
 		// database <<
 	};
+	return Firebase;
 };

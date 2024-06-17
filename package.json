@@ -27,13 +27,15 @@
     "@babel/runtime": "*",
     "@lowentry/utils": "*",
     "firebase": "^10",
-    "react-firebase-hooks": "*"
+    "react-firebase-hooks": "*",
+    "react-redux": "*"
   },
   "peerDependencies": {
     "@babel/runtime": "*",
     "@lowentry/utils": "*",
     "firebase": "^10",
-    "react-firebase-hooks": "*"
+    "react-firebase-hooks": "*",
+    "react-redux": "*"
   },
   "devDependencies": {
     "@babel/core": "^7.24.7",
