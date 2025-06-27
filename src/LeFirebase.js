@@ -15,6 +15,7 @@ export const setup = (config) =>
 {
 	const app = initializeApp(config);
 	const auth = getAuth(app);
+	/** @type {*} */
 	const store = (() =>
 	{
 		try
@@ -293,6 +294,7 @@ export const setup = (config) =>
 			(callback) =>
 			{
 				const connectionRef = ref(db, '.info/connected');
+				/** @type {(()=>void)|null} */
 				let listener = onValue(connectionRef, (snapshot) => callback(!!snapshot.val()));
 				
 				return {
