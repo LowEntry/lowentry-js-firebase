@@ -1,44 +1,27 @@
 {
-  "include": ["tsconfig.d.ts", "src"],
-  "exclude": ["node_modules"],
   "compilerOptions": {
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "es5",
-      "es6",
-      "es2016",
-      "es2017",
-      "es2018",
-      "es2019",
-      "es2020",
-      "es2021",
-      "es2022",
-      "es2023",
-      "esnext"
-    ],
     "allowJs": true,
-    "declaration": true,
-    "declarationMap": false,
-    "esModuleInterop": true,
-    "jsx": "react-jsx",
-    "module": "esnext",
-    "moduleResolution": "node",
-    "outDir": "./build",
-    "removeComments": false,
-    "skipLibCheck": true,
-    "strict": true,
-    "stripInternal": true,
-    "target": "esnext",
     "checkJs": true,
+    "strict": true,
+    "noEmit": true,
     "noImplicitAny": false,
     "noImplicitThis": false,
     "alwaysStrict": true,
     "resolveJsonModule": true,
+    "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "emitDeclarationOnly": true
+    "jsx": "react-jsx",
+    "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "skipLibCheck": true,
+    "types": []
   },
-  "typeAcquisition": {
-    "include": ["react", "react-dom"]
-  }
+  "include": [
+    "tsconfig.d.ts",
+    "src"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }
