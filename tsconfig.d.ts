@@ -1,3 +1,1 @@
-interface Window {
-  [key: string]: any;
-}
+/// <reference lib="esnext" />

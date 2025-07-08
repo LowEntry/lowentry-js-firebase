@@ -3,7 +3,6 @@
     "allowJs": true,
     "checkJs": true,
     "strict": true,
-    "noEmit": true,
     "noImplicitAny": false,
     "noImplicitThis": false,
     "alwaysStrict": true,
@@ -15,7 +14,14 @@
     "module": "esnext",
     "moduleResolution": "node",
     "skipLibCheck": true,
-    "types": []
+    "types": [],
+    "noEmit": false,
+    "declaration": true,
+    "declarationMap": false,
+    "outDir": "./build",
+    "removeComments": false,
+    "stripInternal": true,
+    "emitDeclarationOnly": true
   },
   "include": [
     "tsconfig.d.ts",
@@ -23,5 +29,11 @@
   ],
   "exclude": [
     "node_modules"
-  ]
+  ],
+  "typeAcquisition": {
+    "include": [
+      "react",
+      "react-dom"
+    ]
+  }
 }

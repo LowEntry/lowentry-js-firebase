@@ -1,6 +1,6 @@
 {
   "name": "@lowentry/firebase",
-  "version": "1.3.3",
+  "version": "1.4.0",
   "private": false,
   "type": "module",
   "main": "./index.js",
@@ -21,7 +21,7 @@
   "scripts": {
     "build": "npm exec -- rollup -c",
     "prepublishOnly": "rm -r src && mv dist/* ./ && rm -r dist",
-    "test": "npx tsc && jest"
+    "test": "npx tsc && vitest run"
   },
   "dependencies": {
     "@babel/runtime": "*",
@@ -44,20 +44,21 @@
     "@babel/plugin-transform-runtime": "^7.24.7",
     "@babel/preset-env": "^7.24.7",
     "@babel/preset-react": "^7.24.7",
+    "@microsoft/api-extractor": "^7.52.8",
+    "@rollup/plugin-babel": "^6.0.4",
     "@rollup/plugin-commonjs": "^26.0.1",
     "@rollup/plugin-node-resolve": "^15.2.3",
     "@rollup/plugin-url": "^8.0.2",
     "autoprefixer": "^10.4.19",
     "cssnano": "^7.0.2",
     "fs-extra": "^11.2.0",
-    "jest": "^30.0.3",
     "less": "^4.2.0",
     "rollup": "^2.79.1",
-    "rollup-plugin-babel": "^4.4.0",
+    "rollup-plugin-execute": "^1.1.1",
     "rollup-plugin-peer-deps-external": "^2.2.4",
     "rollup-plugin-postcss": "^4.0.2",
     "sass": "^1.77.5",
-    "ts-jest": "^29.4.0",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.4"
   }
 }
