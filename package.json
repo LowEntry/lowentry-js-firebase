@@ -20,7 +20,7 @@
   },
   "scripts": {
     "build": "npm exec -- rollup -c",
-    "prepublishOnly": "rm -r src && mv dist/* ./ && rm -r dist",
+    "prepublishOnly": "rm -r build && rm -r tests && rm -r src && mv dist/* ./ && rm -r dist",
     "test": "npx tsc && vitest run"
   },
   "dependencies": {
